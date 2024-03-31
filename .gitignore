@@ -1,8 +1,7 @@
+# Inlcude
 
-
-absloadm.exe
-kompassr.exe
-komppl.exe
-
-examppl.tex
-examppl.ass
+# Ignore
+.*/
+*.exe
+*.tex
+*.ass
