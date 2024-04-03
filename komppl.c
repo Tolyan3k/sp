@@ -1891,7 +1891,7 @@ int SVI2() {
 
   /* MVC @BUF0+3(1),B */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "MVC", 3);
-  memcpy(ASS_CARD._BUFCARD.OPERAND, "@BUF0+3(1),B", 10);
+  memcpy(ASS_CARD._BUFCARD.OPERAND, "@BUF0+3(1),B", 12);
   ZKARD();
 
   /* XR @R_C,@R_C */
