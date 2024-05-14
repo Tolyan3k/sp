@@ -1,7 +1,8 @@
 # Inlcude
 
 # Ignore
-.*/
+.*
 *.exe
 *.tex
 *.ass
+.*/
