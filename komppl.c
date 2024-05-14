@@ -1636,11 +1636,15 @@ int OEN2 ()
         }
         else {
           if (SYM [i].TYPE == 'I') {
+            memcpy(ASS_CARD._BUFCARD.OPERAC, "DS", 2);
+            memcpy(ASS_CARD._BUFCARD.OPERAND, "0F", 2);
+            COMMENT_END(";Выравнивание по адресу до 4-х байт");
+            ZKARD();
+
             /* пишем идентификатор в поле метки псевдооперации DC */
             strcpy ( ASS_CARD._BUFCARD.METKA, SYM [i].NAME );
             /* пишем разделитель полей*/
             ASS_CARD._BUFCARD.METKA [ strlen( ASS_CARD._BUFCARD.METKA ) ] = ' ';
-
             /* пишем код псевдооперации DC */
             memcpy ( ASS_CARD._BUFCARD.OPERAC, "DS", 2 );
             memcpy ( ASS_CARD._BUFCARD.OPERAND, "BL4", 3 );
@@ -1649,10 +1653,6 @@ int OEN2 ()
             COMMENT_END(" - строка бит");
             ZKARD();
 
-            memcpy(ASS_CARD._BUFCARD.OPERAC, "DS", 2);
-            memcpy(ASS_CARD._BUFCARD.OPERAND, "0F", 2);
-            COMMENT_END(";Выравнивание по адресу до 4-х байт");
-            ZKARD();
           }
         }
        }
