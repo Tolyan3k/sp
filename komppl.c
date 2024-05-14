@@ -1953,7 +1953,7 @@ int SVI2() {
   /* MVC @BUF0(3),A */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "MVC", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@BUF0(3),A", 10);
-  COMMENT_END(";;Перенесём строку из 3-х значащих символов из A в BUF0");
+  COMMENT_END(";Перенесём строку из 3-х значащих символов из A в BUF0");
   ZKARD();
 
   /* MVC @BUF0+3(1),B */
