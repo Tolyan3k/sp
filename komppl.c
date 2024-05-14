@@ -41,16 +41,16 @@ char ISXTXT [MAXNISXTXT][80];                     /* тело массива    
 */
 
 /* счетчики циклов        */
-int I1,I2,I3,I4;                                  
+int I1,I2,I3,I4;
 
 /*последний обработанный  */
 /*символ в уплотненном    */
 /*исходном тексте         */
-char PREDSYM = ' ';                               
+char PREDSYM = ' ';
 
 /*место хранения уплотнен-*/
 /*ного исходного текста   */
-char STROKA [ NSTROKA ];                          
+char STROKA [ NSTROKA ];
 
 /*текущие индексы соответ-*/
 /*ственно в:              */
@@ -60,7 +60,7 @@ char STROKA [ NSTROKA ];
 /*целей;                  */
 /* - стеке достигнутых    */
 /*целей;                  */
-int I,J,K,L;                                      
+int I,J,K,L;
 
 
 #define BUFCARD_SIZE 250
@@ -72,7 +72,7 @@ const int COMM_SIZE = BUFCARD_SIZE - METKA_SIZE - OPERAC_SIZE - OPERAND_SIZE;
 /*Шаблон для генерации    */
 /*записи выходного файла  */
 /*на АССЕМБЛЕРЕ IBM 370   */
-union                                 
+union
 {
   char    BUFCARD [BUFCARD_SIZE];
   struct
@@ -90,10 +90,10 @@ union
 /*массив для хранения     */
 /*выходного текста на     */
 /*АССЕМБЛЕРЕ IBM 370      */
-char ASSTXT [ MAXLTXT ][BUFCARD_SIZE];                      
+char ASSTXT [ MAXLTXT ][BUFCARD_SIZE];
 
 /*индекс выходного массива*/
-int  IASSTXT;                                     
+int  IASSTXT;
 
 /*массив для форматирован-*/
 /*ного  (в виде последова-*/
@@ -102,7 +102,7 @@ int  IASSTXT;
 /*ставления интерпретиру- */
 /*емого фрагмента исходно-*/
 /*го плотного текста      */
-char FORMT [MAXFORMT] [9];                        
+char FORMT [MAXFORMT] [9];
 
 int  IFORMT;                                      /*индекс форматированного */
 						                                      /*массива                 */
@@ -408,16 +408,16 @@ struct
  {/*.  205     .*/   206 ,   204 , "IPE" ,    0 },
  {/*.  206     .*/   207 ,   205 , "SVI" ,    0 },
  {/*.  207     .*/     0 ,   206 , "*  " ,    0 },
- 
+
  {/*.  208     .*/   209 ,   154 , "SVI" ,    0 },
  {/*.  209     .*/   210 ,   208 , ";  " ,    0 },
  {/*.  210     .*/   211 ,   209 , "OPS" ,    0 },
  {/*.  211     .*/     0 ,   210 , "*  " ,    0 },
- 
+
  {/*.  212     .*/   213 ,   179 , "OPS" ,    0 },
  {/*.  213     .*/   214 ,   212 , "TEL" ,    0 },
  {/*.  214     .*/     0 ,   213 , "*  " ,    0 },
- 
+
  {/*.  215     .*/   216 ,   193 , "I  " ,    0 },
  {/*.  216     .*/   217 ,   215 , "N  " ,    0 },
  {/*.  217     .*/   218 ,   216 , "I  " ,    0 },
@@ -430,7 +430,7 @@ struct
  {/*.  224     .*/   225 ,   223 , ";  " ,    0 },
  {/*.  225     .*/   226 ,   224 , "ODC" ,    0 },
  {/*.  226     .*/     0 ,   225 , "*  " ,    0 },
- 
+
  {/*.  227     .*/   228 ,    51 , "T  " ,    0 },
  {/*.  228     .*/   229 ,   227 , "(  " ,    0 },
  {/*.  229     .*/   230 ,   228 , "RZR" ,    0 },
@@ -883,27 +883,42 @@ L10:
 
 /*..........................................................................*/
 
-struct                                            /* таблица имен меток и   */
- {                                                /* переменных, заполняемая*/
-  char NAME [8];                                  /* на первом проходе се-  */
-  char TYPE;                                      /* мантического вычисления*/
-  char RAZR [5];                                  /* и используемая на вто- */
-  char INIT [50];                                 /* ром проходе семантичес-*/
- } SYM [ NSYM ];                                  /* кого вычисления        */
+/* таблица имен меток и   */
+/* переменных, заполняемая*/
+/* на первом проходе се-  */
+/* мантического вычисления*/
+/* и используемая на вто- */
+/* ром проходе семантичес-*/
+/* кого вычисления        */
+struct
+ {
+  char NAME [8];
+  char TYPE;
+  char RAZR [5];
+  char INIT [50];
+ } SYM [ NSYM ];
 
-int ISYM = 0;                                     /* текущий индекс таблицы */
-						  /* имен                   */
+/* текущий индекс таблицы */
+/* имен                   */
+int ISYM = 0;
 
-char NFIL [30]="\x0";                             /* хранилище имени транс- */
-						  /* лируемой программы     */
+/* хранилище имени транс- */
+/* лируемой программы     */
+char NFIL [30]="\x0";
+
 
 /*..........................................................................*/
 
-long int VALUE ( char* s )                        /* п р о г р а м м а      */
- {                                                /* перевода двоичной      */
-  long int S;                                     /* константы из ASCIIz-ви-*/
-  int i;                                          /* да во внутреннее пред- */
-						  /* ставление типа long int*/
+/* п р о г р а м м а      */
+/* перевода двоичной      */
+/* константы из ASCIIz-ви-*/
+/* да во внутреннее пред- */
+/* ставление типа long int*/
+long int VALUE ( char* s )
+ {
+  long int S;
+  int i;
+
   i = 0;
   S = 0;
   while ( *(s + i) != 'B' )
@@ -966,15 +981,22 @@ FORM1:
 /* ходного файла в массив */
 /* ASSTXT                 */
 void ZKARD()
-{                                                
+{
   memcpy ( ASSTXT [ IASSTXT++ ], ASS_CARD.BUFCARD, BUFCARD_SIZE );
   for (int i = 0; i < BUFCARD_SIZE; ++i )
     ASS_CARD.BUFCARD [i] = ' ';
   return;
 }
 
-void COMMENT(const char *comm) {
-  memcpy(ASS_CARD._BUFCARD.COMM, comm, strlen(comm));
+int __COMMENT_CUR_POS = 0;
+void COMMENT_END(const char *comm) {
+  memcpy(ASS_CARD._BUFCARD.COMM + __COMMENT_CUR_POS, comm, strlen(comm));
+  __COMMENT_CUR_POS = 0;
+}
+
+void COMMENT_ADD(const char *comm) {
+  memcpy(ASS_CARD._BUFCARD.COMM + __COMMENT_CUR_POS, comm, strlen(comm));
+  __COMMENT_CUR_POS += strlen(comm);
 }
 
 /*..........................................................................*/
@@ -1095,7 +1117,7 @@ int ODC1 ()
 						                                      /* по ошибке              */
    }
 
-                 
+
 
   if ( !strcmp ( FORMT [2], "BIN" ) &&            /* если идентификатор оп- */
 		  !strcmp ( FORMT [3], "FIXED" ) )            /* ределен как bin fixed, */
@@ -1116,7 +1138,7 @@ int ODC1 ()
       if ( !strcmp(FORMT[2], "BIT"))
       {
         /* Так как у нас отсутствует слово Fixed, то разряд на 3 позиции */
-        strcpy ( SYM [ISYM].NAME, FORMT [1] ); 
+        strcpy ( SYM [ISYM].NAME, FORMT [1] );
         strcpy ( SYM [ISYM].RAZR, FORMT [3] );
         SYM [ISYM].TYPE = 'I';
         goto ODC12;
@@ -1166,7 +1188,7 @@ ODC12:
   }
 
 
-  return 0;                              
+  return 0;
  }
 
 /*..........................................................................*/
@@ -1299,7 +1321,7 @@ int AVI2 ()
   FORM ();                                        /*форматируем правую часть*/
 						                                      /*арифметического ПЛ1-опе-*/
 						                                      /*ратора присваивания     */
-  
+
   if ( IFORMT == 1 )                              /* если правая часть одно-*/
      {                                            /* термовая, то:          */
     for ( i = 0; i < ISYM; i++ )                  /* ищем этот терм в табли-*/
@@ -1553,7 +1575,7 @@ int OEN2 ()
 						                                      /*ного возврата управления*/
 						                                      /* в вызывающую программу */
   memcpy ( ASS_CARD._BUFCARD.OPERAND,"15,@R_EXIT", 10 );/* операнды команды и*/
-  COMMENT(";Безусловный переход по адресу в регистре R_EXIT");
+  COMMENT_END(";Безусловный переход по адресу в регистре R_EXIT");
   ZKARD();                                        /* запомнить опреацию*/
 						                                      /* Ассемблера        */
                                                   /* далее идет блок форми- */
@@ -1597,9 +1619,9 @@ int OEN2 ()
        else { // TODO
         if (SYM [i].TYPE == 'C') {
           /* пишем идентификатор в поле метки псевдооперации DC */
-          strcpy ( ASS_CARD._BUFCARD.METKA, SYM [i].NAME );         
+          strcpy ( ASS_CARD._BUFCARD.METKA, SYM [i].NAME );
           /* пишем разделитель полей*/
-          ASS_CARD._BUFCARD.METKA [ strlen( ASS_CARD._BUFCARD.METKA ) ] = ' '; 
+          ASS_CARD._BUFCARD.METKA [ strlen( ASS_CARD._BUFCARD.METKA ) ] = ' ';
 
           memcpy ( ASS_CARD._BUFCARD.OPERAC, "DC", 2 );        /* пишем код псевдооперации DC */
 
@@ -1607,25 +1629,29 @@ int OEN2 ()
           strcat ( tmp3, SYM [i].RAZR);
           strcat ( tmp3, SYM[i].INIT );
           memcpy ( ASS_CARD._BUFCARD.OPERAND, tmp3, 2 + strlen(SYM [i].RAZR) + strlen(SYM[i].INIT));
-          COMMENT(";Переменная - строка символов");
-          ZKARD();                           
+          COMMENT_ADD(";Переменная ");
+          COMMENT_ADD(SYM[i].NAME);
+          COMMENT_END(" - строка символов");
+          ZKARD();
         }
         else {
           if (SYM [i].TYPE == 'I') {
             /* пишем идентификатор в поле метки псевдооперации DC */
-            strcpy ( ASS_CARD._BUFCARD.METKA, SYM [i].NAME );         
+            strcpy ( ASS_CARD._BUFCARD.METKA, SYM [i].NAME );
             /* пишем разделитель полей*/
-            ASS_CARD._BUFCARD.METKA [ strlen( ASS_CARD._BUFCARD.METKA ) ] = ' '; 
+            ASS_CARD._BUFCARD.METKA [ strlen( ASS_CARD._BUFCARD.METKA ) ] = ' ';
 
             /* пишем код псевдооперации DC */
-            memcpy ( ASS_CARD._BUFCARD.OPERAC, "DS", 2 );        
+            memcpy ( ASS_CARD._BUFCARD.OPERAC, "DS", 2 );
             memcpy ( ASS_CARD._BUFCARD.OPERAND, "BL4", 3 );
-            COMMENT(";Переменная - строка бит");
+            COMMENT_ADD(";Переменная ");
+            COMMENT_ADD(SYM[i].NAME);
+            COMMENT_END(" - строка бит");
             ZKARD();
 
             memcpy(ASS_CARD._BUFCARD.OPERAC, "DS", 2);
             memcpy(ASS_CARD._BUFCARD.OPERAND, "0F", 2);
-            COMMENT(";Выравнивание по адресу до 4-х байт");
+            COMMENT_END(";Выравнивание по адресу до 4-х байт");
             ZKARD();
           }
         }
@@ -1644,89 +1670,89 @@ int OEN2 ()
   memcpy( ASS_CARD._BUFCARD.METKA, "@BUF0", 5);
   memcpy( ASS_CARD._BUFCARD.OPERAC, "DC", 2);
   memcpy( ASS_CARD._BUFCARD.OPERAND, "CL5' '", 6);
-  COMMENT(";Буфер для объединения строк A и B");
+  COMMENT_END(";Буфер для объединения строк A и B");
   ZKARD();
 
   /* @NULL_C DC CL'1' */
   memcpy( ASS_CARD._BUFCARD.METKA, "@NULL_C", 7);
   memcpy( ASS_CARD._BUFCARD.OPERAC, "DC", 2);
   memcpy( ASS_CARD._BUFCARD.OPERAND, "CL1' '", 6);
-  COMMENT(";Символ конца строки для буфера");
+  COMMENT_END(";Символ конца строки для буфера");
   ZKARD();
 
   /* @ZERO_C DC CL1'0' */
   memcpy(ASS_CARD._BUFCARD.METKA, "@ZERO_C", 7);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "DC", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "CL1'0'", 6);
-  COMMENT(";Символ '0'");
+  COMMENT_END(";Символ '0'");
   ZKARD();
 
   /* Выравнивание */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "DS", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "0F", 2);
-  COMMENT(";Выравнивание по адресу до 4-х байт");
+  COMMENT_END(";Выравнивание по адресу до 4-х байт");
   ZKARD();
 
   /* @ONE_L DC BL32'1' */
   memcpy(ASS_CARD._BUFCARD.METKA, "@ONE_L", 6);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "DC", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "BL32'1'", 7);
-  COMMENT(";Слово с битом '1' слева, остальные нули");
+  COMMENT_END(";Слово с битом '1' слева, остальные нули");
   ZKARD();
 
   /* @ONE_R DC F'1' */
   memcpy(ASS_CARD._BUFCARD.METKA, "@ONE_R", 6);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "DC", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "F'1'", 4);
-  COMMENT(";Слово с единицей");
+  COMMENT_END(";Слово с единицей");
   ZKARD();
 
   /* @R_C EQU 1 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@R_C", 4);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "EQU", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "1", 1);
-  COMMENT(";Хранит промежуточное значение переменной C");
+  COMMENT_END(";Хранит промежуточное значение переменной C");
   ZKARD();
 
   /* @R_ONE EQU 2 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@R_ONE", 6);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "EQU", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "2", 1);
-  COMMENT(";Хранит значение единицы");
+  COMMENT_END(";Хранит значение единицы");
   ZKARD();
 
   /* @R_PTN EQU 3 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@R_PTN", 6);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "EQU", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "3", 1);
-  COMMENT(";Хранит шаблон с битом '1'");
+  COMMENT_END(";Хранит шаблон с битом '1'");
   ZKARD();
 
   /* @R_PTR EQU 4 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@R_PTR", 6);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "EQU", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "4", 1);
-  COMMENT(";Хранит адрес элемента строки BUF0");
+  COMMENT_END(";Хранит адрес элемента строки BUF0");
   ZKARD();
 
   /* @R_BASE EQU 5 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@R_BASE", 7);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "EQU", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "5", 1);
-  COMMENT(";R_BASE назначим 5");
+  COMMENT_END(";R_BASE назначим 5");
   ZKARD();
 
   /* @R_EXIT EQU 14 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@R_EXIT", 7);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "EQU", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "14", 2);
-  COMMENT(";R_EXIT назначим 14");
+  COMMENT_END(";R_EXIT назначим 14");
   ZKARD();
 
   memcpy ( ASS_CARD._BUFCARD.OPERAC, "END", 3 );  /* формирование кода ас-  */
 						                                      /* семблеровской псевдо-  */
 						                                      /* операции END,          */
-  COMMENT(";Конец текста блока");
+  COMMENT_END(";Конец текста блока");
   ZKARD();                                       /* запоминание псевдоопе- */
 						                                      /* рации                  */
 
@@ -1821,20 +1847,20 @@ int OPR2 ()
 
   memcpy ( ASS_CARD._BUFCARD.OPERAC, "START", 5 );/* достраиваем код и опе- */
   memcpy ( ASS_CARD._BUFCARD.OPERAND, "0", 1 );   /* ранды  в  START-псевдо-*/
-  COMMENT(";счетчик отн. адреса в нуль");
+  COMMENT_END(";счетчик отн. адреса в нуль");
   ZKARD();                                       /* запоминаем карту Ассем-*/
 						                                      /* блера                  */
 
   memcpy ( ASS_CARD._BUFCARD.OPERAC, "BALR", 4 ); /* формируем BALR-операцию*/
   memcpy ( ASS_CARD._BUFCARD.OPERAND,             /* Ассемблера             */
 				  "@R_BASE,0", 9 );
-  COMMENT(";отн. адр. базы в RBASE");
+  COMMENT_END(";отн. адр. базы в RBASE");
   ZKARD();                                       /* и запоминаем ее        */
 
   memcpy ( ASS_CARD._BUFCARD.OPERAC, "USING", 5 );/* формируем USING-псевдо-*/
   memcpy ( ASS_CARD._BUFCARD.OPERAND,             /* операцию Ассемблера    */
 				   "*,@R_BASE", 9 );
-  COMMENT(";Объявл. RBASE регистром базы");
+  COMMENT_END(";Объявл. RBASE регистром базы");
   ZKARD();                                       /* и запоминаем ее        */
 
   return 0;                                       /* завершить подпрограмму */
@@ -1927,82 +1953,82 @@ int SVI2() {
   /* MVC @BUF0(3),A */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "MVC", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@BUF0(3),A", 10);
-  COMMENT(";;Перенесём строку из 3-х значащих символов из A в BUF0");
+  COMMENT_END(";;Перенесём строку из 3-х значащих символов из A в BUF0");
   ZKARD();
 
   /* MVC @BUF0+3(1),B */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "MVC", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@BUF0+3(1),B", 12);
-  COMMENT(";Перенесём строку из 1-го значащего символа из B в BUF0, начиная с 4-го байта");
+  COMMENT_END(";Перенесём строку из 1-го значащего символа из B в BUF0, начиная с 4-го байта");
   ZKARD();
 
   /* XR @R_C,@R_C */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "XR", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_C,@R_C", 9);
-  COMMENT(";Обнулим значение регистра R_C");
+  COMMENT_END(";Обнулим значение регистра R_C");
   ZKARD();
 
   /* L @R_ONE,@R_ONE */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "L", 1);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_ONE,@R_ONE", 13);
-  COMMENT(";Присвоим в регистр R_ONE единицу из значения ONE_R");
+  COMMENT_END(";Присвоим в регистр R_ONE единицу из значения ONE_R");
   ZKARD();
 
   /* L @R_PTN,@ONE_L */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "L", 1);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_PTN,@ONE_L", 13);
-  COMMENT(";Присвоим в регистр R_PTN значение из ONE_L");
+  COMMENT_END(";Присвоим в регистр R_PTN значение из ONE_L");
   ZKARD();
 
   /* LA @R_PTR,@BUF0 */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "LA", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_PTR,@BUF0", 12);
-  COMMENT(";Загрузим в регистр R_PTR адрес BUF0");
+  COMMENT_END(";Загрузим в регистр R_PTR адрес BUF0");
   ZKARD();
 
   /*@LOOP CLC 0(1,@R_PTR),@ZERO_C */
   memcpy(ASS_CARD._BUFCARD.METKA, "@LOOP", 5);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "CLC", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "0(1,@R_PTR),@ZERO_C", 19);
-  COMMENT(";Сравним один символ по адресу из регистра R_PTR со значением символа '0'");
+  COMMENT_END(";Сравним один символ по адресу из регистра R_PTR со значением символа '0'");
   ZKARD();
 
   /* BC 8,@ZERO */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "BC", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "8,@ZERO", 7);
-  COMMENT(";Если символ по адресу из регистра R_PTR равен '0', то переходим в метку @ZERO, иначе идём дальше");
+  COMMENT_END(";Если символ по адресу из регистра R_PTR равен '0', то переходим в метку @ZERO, иначе идём дальше");
   ZKARD();
 
   /* OR @R_C,@R_PTN */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "OR", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_C,@R_PTN", 11);
-  COMMENT(";Логический “или”");
+  COMMENT_END(";Логический “или”");
   ZKARD();
 
   /* @ZERO SRL @R_PTN,1 */
   memcpy(ASS_CARD._BUFCARD.METKA, "@ZERO", 5);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "SRL", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_PTN,1", 8);
-  COMMENT(";Логический сдвиг вправо на единицу");
+  COMMENT_END(";Логический сдвиг вправо на единицу");
   ZKARD();
 
   /* AR @R_PTR,@R_ONE */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "AR", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_PTR,@R_ONE", 13);
-  COMMENT(";Сложение регистров: перейдём к следующем символу, увеличив значение регистра R_PTR на единицу");
+  COMMENT_END(";Сложение регистров: перейдём к следующем символу, увеличив значение регистра R_PTR на единицу");
   ZKARD();
 
   /* CLC 0(1,@R_PTR),@NULL_C */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "CLC", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "0(1,@R_PTR),@NULL_C", 19);
-  COMMENT(";Сравнение символа по адресу из регистра R_PTR с символом конца строки");
+  COMMENT_END(";Сравнение символа по адресу из регистра R_PTR с символом конца строки");
   ZKARD();
 
   /* @END BC 7,@LOOP */
   memcpy(ASS_CARD._BUFCARD.METKA, "@END", 4);
   memcpy(ASS_CARD._BUFCARD.OPERAC, "BC", 2);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "7,@LOOP", 7);
-  COMMENT(";Если не достигли конца строки, переходим на строку по метке LOOP");
+  COMMENT_END(";Если не достигли конца строки, переходим на строку по метке LOOP");
   ZKARD();
 
   return 0;
@@ -2025,15 +2051,15 @@ int OPS2() {
   /* SRL @R_C,24 */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "SRL", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_C,24", 7);
-  COMMENT(";Сдвиг значения регистра R_C вправо на 24 бита");
+  COMMENT_END(";Сдвиг значения регистра R_C вправо на 24 бита");
   ZKARD();
 
   /* STC @R_C,C */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "STC", 3);
   memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_C,C", 6);
-  COMMENT(";Перенос последнего байта из регистра R_C в память по адресу C");
+  COMMENT_END(";Перенос последнего байта из регистра R_C в память по адресу C");
   ZKARD();
-  
+
   return 0;
 }
 
@@ -2066,7 +2092,7 @@ int gen_COD ()                                    /*интерпретации �
      {/*    7  */    LIT1, LIT2 },            	  /* - DST.DST2 - левая гра-*/
      {/*    8  */    MAN1, MAN2 },		            /*ница интерпретируемого  */
      {/*    9  */    ODC1, ODC2 },		            /*фрагмента исх.текста;   */
-     {/*   10  */    OEN1, OEN2 },          
+     {/*   10  */    OEN1, OEN2 },
      {/*   11  */    OPA1, OPA2 },		            /* - DST.DST4 -правая гра-*/
      {/*   12  */    OPR1, OPR2 },		            /*ница интерпретируемого  */
      {/*   13  */    PRO1, PRO2 },		            /*фрагмента исх.текста.   */
@@ -2162,7 +2188,7 @@ int main (int argc, char **argv )
 	 {
 	  if ( feof ( fp ) )                            /* в конце файла идем на  */
 	   goto main1;                                  /* метку  main1           */
-    
+
 	  else                                          /* при сбое чтения        */
 	   {                                            /* выдаем диагностику     */
 	    printf ( "%s\n",
@@ -2284,7 +2310,7 @@ main1:                                            /* по завершении �
    }
 
   printf ( "%s\n", "трансляция прервана" );       /* обобщающая диагностика */
-	
+
   return 0;
  }
 /*..........................................................................*/
