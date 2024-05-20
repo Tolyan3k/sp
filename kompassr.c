@@ -83,26 +83,39 @@ int SRX();                                        /*подпр.обр.опер.R
 ******* ОБ'ЯВЛЕНИЕ структуры строки (карты) исходного текста
 */
 
- struct ASSKARTA                                  /*структ.карты АССЕМБЛЕРА */
-  {
-   unsigned  char METKA    [ 8];                  /*поле метки              */
-   unsigned  char PROBEL1  [ 1];                  /*пробел-разделитель      */
-   unsigned  char OPERAC   [ 5];                  /*поле операции           */
-   unsigned  char PROBEL2  [ 1];                  /*пробел-разделитель      */
-   unsigned  char OPERAND  [12];                  /*поле операнда           */
-   unsigned  char PROBEL3  [ 1];                  /*пробел разделитель      */
-   unsigned  char COMM     [52];                  /*поле комментария        */
-  };
+#define ASSCARD_SIZE 250
+#define METKA_SIZE 7
+#define OPERAC_SIZE 5
+#define OPERAND_SIZE 19
+const int COMM_SIZE = ASSCARD_SIZE - METKA_SIZE - OPERAC_SIZE - OPERAND_SIZE;
+
+/*структ.карты АССЕМБЛЕРА */
+struct ASSKARTA
+{
+  /*поле метки              */
+  unsigned  char METKA    [METKA_SIZE];
+  /*пробел-разделитель      */
+  unsigned  char PROBEL1  [ 1];
+  /*поле операции           */
+  unsigned  char OPERAC   [OPERAC_SIZE];
+  /*пробел разделитель      */
+  unsigned  char PROBEL2  [ 1];
+  /*поле операнда           */
+  unsigned  char OPERAND  [OPERAND_SIZE];
+  /*пробел разделитель      */
+  unsigned  char PROBEL3  [ 1];
+  /*поле комментария        */
+  unsigned  char COMM     [219];
+};
 
 /*
 ******* НАЛОЖЕНИЕ структуры карты исх. текста на входной буфер
 */
-
- union                                            /*определить об'единение  */
-  {
-   unsigned char BUFCARD [80];                    /*буфер карты.исх.текста  */
-   struct ASSKARTA STRUCT_BUFCARD;                /*наложение шабл.на буфер */
-  } TEK_ISX_KARTA;
+union                                            /*определить об'единение  */
+{
+  unsigned char BUFCARD [ASSCARD_SIZE];                    /*буфер карты.исх.текста  */
+  struct ASSKARTA STRUCT_BUFCARD;                /*наложение шабл.на буфер */
+} TEK_ISX_KARTA;
 
 /*
 ***** СЧЕТЧИК относительного адреса (смещешия относительно базы )
@@ -912,7 +925,7 @@ int main( int argc, char **argv )                /*главная програм
  {
    FILE *fp;
    char *ptr = argv [1];
-   unsigned char ASSTEXT [DL_ASSTEXT][80];
+   unsigned char ASSTEXT [DL_ASSTEXT][ASSCARD_SIZE];
 
 /*
 ******* Б Л О К  об'явлений рабочих переменных
@@ -967,7 +980,7 @@ int main( int argc, char **argv )                /*главная програм
       for ( I1 = 0; I1 <= DL_ASSTEXT; I1++ )
 
        {
-	if ( !fread ( ASSTEXT [I1], 80, 1, fp ) )
+	if ( !fread ( ASSTEXT [I1], ASSCARD_SIZE, 1, fp ) )
 	 {
 	  if ( feof ( fp ) )
 	   goto main1;
@@ -997,7 +1010,7 @@ main1:
   for ( I1=0; I1 < DL_ASSTEXT; I1++ )             /*для карт с 1 по конечную*/
    {                                              /*                        */
     memcpy ( TEK_ISX_KARTA.BUFCARD , ASSTEXT[I1], /*ч-ть очередн.карту в буф*/
-					     80 );/*                        */
+					     ASSCARD_SIZE );/*                        */
     if (TEK_ISX_KARTA.STRUCT_BUFCARD.METKA [0] == /*переход при отсутствии  */
 					     ' ') /*метки                   */
      goto CONT1;                                  /*на CONT1,               */
@@ -1012,7 +1025,7 @@ main1:
 ***** Б Л О К  поиска текущей операции среди псевдоопераций
 */
 
-   CONT1:
+    CONT1:
 
     for ( I2=0; I2 < NPOP; I2++ )                 /*для всех стр.таб.пс.опер*/
      {                                            /*выполнить следущее:     */
@@ -1078,7 +1091,7 @@ CONT3:
   for ( I1=0; I1 < DL_ASSTEXT; I1++ )             /*для карт с 1 по конечную*/
    {     					  /*                        */
     memcpy ( TEK_ISX_KARTA.BUFCARD , ASSTEXT [I1],/*ч-ть очередн.карту в буф*/
-					     80 );/*                        */
+					     ASSCARD_SIZE );/*                        */
 /*
 ***** Б Л О К  поиска текущей операции среди псевдоопераций
 */
