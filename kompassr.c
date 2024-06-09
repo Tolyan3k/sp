@@ -45,7 +45,7 @@ int FRR(); /*подпр.обр.опер.RR-форм. */
 /*п р о т о т и п  обращ.к*/
 int FRX(); /*подпр.обр.опер.RX-форм. */
 /*..........................................................................*/
-
+int FSS();
 /*
 ***** Б Л О К  об'явлений прототипов обращений к подпрограммам 2-го просмотра
 */
@@ -237,6 +237,20 @@ union /*определить об'единение  */
   unsigned char BUF_OP_RX[4]; /*оределить буфер         */
   struct OPRX OP_RX;          /*структурировать его     */
 } RX;
+
+struct OPSS
+{ unsigned char OP;
+  unsigned char LL;
+  unsigned short B1D1;
+  unsigned short B2D2;
+};
+
+union
+{
+  unsigned char BUF_OP_SS[6];
+  struct OPSS OP_SS;
+} SS;
+
 
 struct STR_BUF_ESD /*структ.буфера карты ESD */
 {
