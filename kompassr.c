@@ -2,7 +2,7 @@
 #define DL_OBJTEXT 50 /*длина об'ектн. текста   */
 #define NSYM 10       /*размер табл.символов    */
 #define NPOP 6        /*размер табл.псевдоопер. */
-#define NOP 6         /*размер табл.операций    */
+#define NOP 15         /*размер табл.операций    */
 #include <ctype.h>    /*вкл.подпр.классиф.симв. */
 #include <stdio.h>    /*вкл.подпр.станд.вв/выв  */
 #include <stdlib.h>   /*вкл.подпрогр.преобр.данн*/
@@ -155,7 +155,16 @@ struct TMOP /*структ.стр.табл.маш.опер*/
         {{'L', ' ', ' ', ' ', ' '}, '\x58', 4, FRX}, /*машинных                */
         {{'A', ' ', ' ', ' ', ' '}, '\x5A', 4, FRX}, /*операций                */
         {{'S', ' ', ' ', ' ', ' '}, '\x5B', 4, FRX}, /*                        */
-};
+        {{'A', 'R', ' ', ' ', ' '}, '\x1A', 2, FRR},
+        {{'M', 'V', 'C', ' ', ' '}, '\xD2', 6, FSS},
+        {{'X', 'R', ' ', ' ', ' '}, '\x17', 2, FRR},
+        {{'L', 'A', ' ', ' ', ' '}, '\x41', 4, FRX},
+        {{'C', 'L', 'C', ' ', ' '}, '\xD5', 6, FSS},
+        {{'B', 'C', ' ', ' ', ' '}, '\x47', 4, FRX},
+        {{'O', 'R', ' ', ' ', ' '}, '\x16', 2, FRR},
+        {{'S', 'R', 'L', ' ', ' '}, '\x88', 4, FRX},
+        {{'S', 'T', 'C', ' ', ' '}, '\x42', 4, FRX},
+    };
 
 /*
 ***** ТАБЛИЦА псевдоопераций
@@ -452,21 +461,21 @@ void STXT(int ARG) /*подпр.формир.TXT-карты  */
   TXT.STR_TXT.ADOP[0] = '\x00';     /*в соглашениях ЕС ЭВМ    */
 
   if (ARG == 2) /*формирование поля OPER  */
-  {
-    memset(TXT.STR_TXT.OPER, 64, 4);
-    memcpy(TXT.STR_TXT.OPER, RR.BUF_OP_RR, 2); /* для RR-формата         */
-    TXT.STR_TXT.DLNOP[1] = 2;
+    {
+      memset(TXT.STR_TXT.OPER, 64, 4);
+      memcpy(TXT.STR_TXT.OPER, RR.BUF_OP_RR, 2); /* для RR-формата         */
+      TXT.STR_TXT.DLNOP[1] = 2;
   } else {
     memcpy(TXT.STR_TXT.OPER, RX.BUF_OP_RX, 4); /* для RX-формата         */
-    TXT.STR_TXT.DLNOP[1] = 4;
+      TXT.STR_TXT.DLNOP[1] = 4;
   }
   memcpy(TXT.STR_TXT.POLE9, ESD.STR_ESD.POLE11, 8); /*формиров.идентифик.поля */
 
   memcpy(OBJTEXT[ITCARD], TXT.BUF_TXT, 80); /*запись об'ектной карты  */
   ITCARD += 1;                              /*коррекц.инд-са своб.к-ты*/
   CHADR = CHADR + ARG;                      /*коррекц.счетчика адреса */
-  return;
-}
+        return;
+      }
 
 int SDC() /*подпр.обр.пс.опер.DC    */
 {
