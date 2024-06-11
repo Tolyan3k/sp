@@ -366,13 +366,16 @@ int FDC() /*подпр.обр.пс.опер.DC    */
 /*..........................................................................*/
 int FDS() /*подпр.обр.пс.опер.DS    */
 {
+  if (T_SYM[ITSYM].DLSYM != 0) {
+    CHADR = (CHADR + 3) / 4 * 4;
+    return (0);
+  }
   if (PRNMET == 'Y') /*если псевдооп.DC помеч.,*/
   {                  /*то:                     */
-    if               /* если псевдооперация DC */
-        (            /* определяет константу   */
-         TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == 'F' /* типа F, то выполнить   */
-         )                                              /* следующее:             */
-    {
+    if /* если псевдооперация DC определяет константу типа F, то выполнить следующее: */
+        (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == 'F' ||
+         (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == '0' &&
+          TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[1] == 'F')) {
       T_SYM[ITSYM].DLSYM = 4;        /*  уст.длину симв. =  4, */
       T_SYM[ITSYM].PRPER = 'R';      /*  а,призн.перемест.='R' */
       if (CHADR % 4)                 /*  и, если CHADR не указ.*/
@@ -381,14 +384,20 @@ int FDS() /*подпр.обр.пс.опер.DS    */
         T_SYM[ITSYM].ZNSYM = CHADR;  /*   запомн. в табл.симв. */
       }
       PRNMET = 'N'; /*  занулить PRNMET зн.'N'*/
+    } else if (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == 'C' ||
+               TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == 'B') {
+      int tmpInt = TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[2] - '0';
+      tmpInt = (tmpInt + 7) / 8;
+      T_SYM[ITSYM].DLSYM = tmpInt;
+      T_SYM[ITSYM].PRPER = 'R';
+      T_SYM[ITSYM].ZNSYM = CHADR;
+      CHADR += tmpInt;  //!!!
     } else
       return (1);                  /* иначе выход по ошибке  */
   } else                           /*если же псевдооп.непомеч*/
     if (CHADR % 4)                 /*и CHADR не кратен 4,то: */
       CHADR = (CHADR / 4 + 1) * 4; /* установ.CHADR на гр.сл.*/
-
-  CHADR = CHADR + 4; /*увелич.CHADR на 4 и     */
-  return (0);        /*успешно завершить подпр.*/
+  return (0);                      /*успешно завершить подпр.*/
 }
 /*..........................................................................*/
 int FEND() /*подпр.обр.пс.опер.END   */
