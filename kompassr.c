@@ -569,32 +569,35 @@ void STXT(int ARG, int type) /*подпр.формир.TXT-карты  */
         return;
       }
 
-int SDC() /*подпр.обр.пс.опер.DC    */
+int SDC()                                         /*подпр.обр.пс.опер.DC    */
 {
-  char *RAB; /*рабочая переменная      */
+  char *RAB;                                      /*рабочая переменная      */
 
-  RX.OP_RX.OP = 0;   /*занулим два старших     */
-  RX.OP_RX.R1X2 = 0; /*байта RX.OP_RX          */
-  if (               /* если операнд начинается*/
-      !memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND, /* с комбинации           */
-              "F'", 2)                              /* F',                    */
-      )                                             /* то                     */
+  RX.OP_RX.OP   = 0;                              /*занулим два старших     */
+  RX.OP_RX.R1X2 = 0;                              /*байта RX.OP_RX          */
+
+  /* если операнд начинается с комбинации F' */
+  if (!memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND,"F'", 2))
   {
-    RAB = strtok /*в перем. c указат.RAB   */
-        (        /*выбираем первую лексему */
-         (char *)TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND + 2, /*операнда текущей карты  */
-         "'" /*исх.текста АССЕМБЛЕРА   */
-        );
+    /*то в перем. c указат.RAB выбираем первую лексему операнда текущей карты исх.текста АССЕМБЛЕРА*/
+    RAB=strtok((char*)TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND+2,"'");
 
-    RX.OP_RX.B2D2 = atoi(RAB);    /*перевод ASCII-> int     */
-    RAB = (char *)&RX.OP_RX.B2D2; /*приведение к соглашениям*/
-    swab(RAB, RAB, 2);            /* ЕС ЭВМ                 */
-  } else                          /*иначе                   */
-    return (1);                   /*сообщение об ошибке     */
+    RX.OP_RX.B2D2 = atoi ( RAB );                 /*перевод ASCII-> int     */
+    RAB = (char *) &RX.OP_RX.B2D2;                /*приведение к соглашениям*/
+    swab ( RAB , RAB , 2 );                       /* ЕС ЭВМ                 */
+    STXT (4, 0);                                       /*формирование TXT-карты  */
+  }
+  else if (!memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND,"C", 1)) {
+    STXT(0, 1);
+  }
+  else if (!memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND,"B", 1)) {
+    STXT(0, 1);
+  }
+  else                                            /*иначе                   */
+    return (1);                                    /*сообщение об ошибке     */
 
-  STXT(4); /*формирование TXT-карты  */
 
-  return (0); /*успешн.завершение подпр.*/
+  return (0);                                     /*успешн.завершение подпр.*/
 }
 /*..........................................................................*/
 int SDS() /*подпр.обр.пс.опер.DS    */
