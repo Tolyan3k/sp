@@ -1229,6 +1229,15 @@ CONT3:
   T_MOP[3].BXPROG = SRX; /*втором просмотре        */
   T_MOP[4].BXPROG = SRX;
   T_MOP[5].BXPROG = SRX;
+  T_MOP[6].BXPROG = SRR;
+  T_MOP[7].BXPROG = SSS;
+  T_MOP[8].BXPROG = SRR;
+  T_MOP[9].BXPROG = SRX;
+  T_MOP[10].BXPROG = SSS;
+  T_MOP[11].BXPROG = SRX;
+  T_MOP[12].BXPROG = SRR;
+  T_MOP[13].BXPROG = SRX;
+  T_MOP[14].BXPROG = SRX;
 
   T_POP[0].BXPROG = SDC;  /*установить указатели    */
   T_POP[1].BXPROG = SDS;  /*на подпрограммы обраб-ки*/
