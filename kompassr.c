@@ -1,8 +1,8 @@
-#define DL_ASSTEXT 50
-#define DL_OBJTEXT 50 /*длина об'ектн. текста   */
-#define NSYM 10       /*размер табл.символов    */
+#define DL_ASSTEXT 36
+#define DL_OBJTEXT 36 /*длина об'ектн. текста   */
+#define NSYM 18       /*размер табл.символов    */
 #define NPOP 6        /*размер табл.псевдоопер. */
-#define NOP 15         /*размер табл.операций    */
+#define NOP 15        /*размер табл.операций    */
 #include <ctype.h>    /*вкл.подпр.классиф.симв. */
 #include <stdio.h>    /*вкл.подпр.станд.вв/выв  */
 #include <stdlib.h>   /*вкл.подпрогр.преобр.данн*/
