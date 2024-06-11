@@ -1170,7 +1170,7 @@ main1:
     ITSYM += 1;                                    /* переход к след.стр.TSYM*/
     PRNMET = 'Y';                                  /* устан.призн.налич.метки*/
     memcpy(T_SYM[ITSYM].IMSYM,                     /* запомнить имя символа  */
-           TEK_ISX_KARTA.STRUCT_BUFCARD.METKA, 8); /* и                      */
+           TEK_ISX_KARTA.STRUCT_BUFCARD.METKA, METKA_SIZE); /* и                      */
     T_SYM[ITSYM].ZNSYM = CHADR;                    /* его значение(отн.адр.) */
 
     /*
@@ -1183,7 +1183,7 @@ main1:
     {                             /*выполнить следущее:     */
       if (                        /* если                   */
           !memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAC, /* псевдооперация         */
-                  T_POP[I2].MNCPOP, 5)                 /* распознана,            */
+                  T_POP[I2].MNCPOP, OPERAC_SIZE)                 /* распознана,            */
           )                                            /* то:                    */
                                                        /*                        */
       {
@@ -1203,7 +1203,7 @@ main1:
     {                            /*выполнить следующее:    */
       if (                       /* если                   */
           !memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAC, /* машинная операция      */
-                  T_MOP[I3].MNCOP, 5)                  /* распознана,            */
+                  T_MOP[I3].MNCOP, OPERAC_SIZE)                  /* распознана,            */
           )                                            /* то:                    */
                                                        /*                        */
       {
@@ -1251,7 +1251,7 @@ CONT3:
     {                             /*выполнить следущее:     */
       if (                        /* если                   */
           !memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAC, /* псевдооперация         */
-                  T_POP[I2].MNCPOP, 5)                 /* распознана,            */
+                  T_POP[I2].MNCPOP, OPERAC_SIZE)                 /* распознана,            */
           )                                            /* то                     */
                                                        /*                        */
       {
@@ -1269,7 +1269,7 @@ CONT3:
     {                            /*выполнить следующее:    */
       if (                       /* если                   */
           !memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAC, /* машинная операция      */
-                  T_MOP[I3].MNCOP, 5)                  /* распознана             */
+                  T_MOP[I3].MNCOP, OPERAC_SIZE)                  /* распознана             */
           )                                            /* то                     */
                                                        /*                        */
       {
