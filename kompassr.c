@@ -164,7 +164,7 @@ struct TMOP /*структ.стр.табл.маш.опер*/
         {{'O', 'R', ' ', ' ', ' '}, '\x16', 2, FRR},
         {{'S', 'R', 'L', ' ', ' '}, '\x88', 4, FRX},
         {{'S', 'T', 'C', ' ', ' '}, '\x42', 4, FRX},
-    };
+};
 
 /*
 ***** ТАБЛИЦА псевдоопераций
@@ -493,7 +493,7 @@ void STXT(int ARG, int type) /*подпр.формир.TXT-карты  */
   TXT.STR_TXT.ADOP[0] = '\x00';     /*в соглашениях ЕС ЭВМ    */
 
   if (type == 0) {
-  if (ARG == 2) /*формирование поля OPER  */
+    if (ARG == 2) /*формирование поля OPER  */
     {
       memset(TXT.STR_TXT.OPER, 64, 4);
       memcpy(TXT.STR_TXT.OPER, RR.BUF_OP_RR, 2); /* для RR-формата         */
@@ -504,7 +504,7 @@ void STXT(int ARG, int type) /*подпр.формир.TXT-карты  */
       TXT.STR_TXT.DLNOP[1] = 6;
       razmer = 6;
     } else if (ARG == 4) {
-    memcpy(TXT.STR_TXT.OPER, RX.BUF_OP_RX, 4); /* для RX-формата         */
+      memcpy(TXT.STR_TXT.OPER, RX.BUF_OP_RX, 4); /* для RX-формата         */
       TXT.STR_TXT.DLNOP[1] = 4;
       razmer = 4;
     }
@@ -564,8 +564,8 @@ void STXT(int ARG, int type) /*подпр.формир.TXT-карты  */
     TXT.BUF_TXT[16 + i] = 64;
   }
 
-        return;
-      }
+  return;
+}
 
 int SDC()                                         /*подпр.обр.пс.опер.DC    */
 {
@@ -789,7 +789,7 @@ int SRR() /*подпр.обр.опер.RR-форм. */
   {                                              /*с буквы, то:            */
     for (J = 0; J <= ITSYM; J++)                 /* все метки исх.текста в */
     {                                            /* табл. T_SYM сравниваем */
-                                 /* со знач.перем. *METKA1 */
+                                                 /* со знач.перем. *METKA1 */
       METKA = strtok((char *)T_SYM[J].IMSYM, " ");
       if (!strcmp(METKA, METKA1))   /* и при совпадении:      */
       {                             /*  берем значение этой   */
@@ -809,7 +809,7 @@ SRR1:
   {                                              /*с буквы, то:            */
     for (J = 0; J <= ITSYM; J++)                 /* все метки исх.текста в */
     {                                            /* табл. T_SYM сравниваем */
-                                 /* со знач.перем. *МЕТКА2 */
+                                                 /* со знач.перем. *МЕТКА2 */
       METKA = strtok((char *)T_SYM[J].IMSYM, " ");
       if (!strcmp(METKA, METKA2))     /* и при совпадении:      */
       {                               /*  берем значение этой   */
@@ -863,7 +863,7 @@ int SRX() /*подпр.обр.опер.RX-форм. */
   {                                              /*с буквы, то:            */
     for (J = 0; J <= ITSYM; J++)                 /* все метки исх.текста в */
     {                                            /* табл. T_SYM сравниваем */
-                                 /* со знач.перем. *METKA  */
+                                                 /* со знач.перем. *METKA  */
       METKA = strtok((char *)T_SYM[J].IMSYM, " ");
       if (!strcmp(METKA, METKA1)) /* и при совпадении:      */
 
@@ -884,7 +884,7 @@ SRX1:
   {                                              /*с буквы, то:            */
     for (J = 0; J <= ITSYM; J++)                 /* все метки исх.текста в */
     {                                            /* табл. T_SYM сравниваем */
-                                 /* со знач.перем. *МЕТКА  */
+                                                 /* со знач.перем. *МЕТКА  */
       METKA = strtok((char *)T_SYM[J].IMSYM, " ");
       if (!strcmp(METKA, METKA2))             /* и при совпадении:      */
       {                                       /*  установить нач.знач.: */
