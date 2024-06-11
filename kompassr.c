@@ -484,29 +484,88 @@ int FSS() {
 ******* Б Л О К  об'явлений подпрограмм, используемых при 2-ом просмотре
 */
 
-void STXT(int ARG) /*подпр.формир.TXT-карты  */
+void STXT(int ARG, int type) /*подпр.формир.TXT-карты  */
 {
   char *PTR; /*рабоч.переменная-указат.*/
+  int razmer = 0;
 
   PTR = (char *)&CHADR;             /*формирование поля ADOP  */
   TXT.STR_TXT.ADOP[2] = *PTR;       /*TXT-карты в формате     */
   TXT.STR_TXT.ADOP[1] = *(PTR + 1); /*двоичного целого        */
   TXT.STR_TXT.ADOP[0] = '\x00';     /*в соглашениях ЕС ЭВМ    */
 
+  if (type == 0) {
   if (ARG == 2) /*формирование поля OPER  */
     {
       memset(TXT.STR_TXT.OPER, 64, 4);
       memcpy(TXT.STR_TXT.OPER, RR.BUF_OP_RR, 2); /* для RR-формата         */
       TXT.STR_TXT.DLNOP[1] = 2;
-  } else {
+      razmer = 2;
+    } else if (ARG == 6) {
+      memcpy(TXT.STR_TXT.OPER, SS.BUF_OP_SS, 6); /* для SS-формата*/
+      TXT.STR_TXT.DLNOP[1] = 6;
+      razmer = 6;
+    } else if (ARG == 4) {
     memcpy(TXT.STR_TXT.OPER, RX.BUF_OP_RX, 4); /* для RX-формата         */
       TXT.STR_TXT.DLNOP[1] = 4;
+      razmer = 4;
+    }
+  } else if (type == 1) {
+    if (!memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND, "C", 1)) {
+      razmer = atoi(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND + 2);
+      char *chars = strtok((char *)TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND + 4, "'");
+
+      ARG = razmer;
+      for (int i = 0; i < razmer; i++) {
+        if (isdigit(chars[i])) {
+          int tmp = chars[i];
+          TXT.BUF_TXT[16 + i] = tmp;
+        } else {
+          TXT.BUF_TXT[16 + i] = 32;
+        }
+      TXT.STR_TXT.DLNOP[1] = razmer;
+      }
+    } else if (!memcmp(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND, "B", 1)) {
+      razmer = atoi(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND + 2);
+      razmer = (razmer + 7) / 8;
+      ARG = razmer;
+      TXT.BUF_TXT[16] = 128;
+      TXT.BUF_TXT[17] = 00;
+      TXT.BUF_TXT[18] = 00;
+      TXT.BUF_TXT[19] = 00;
+      TXT.STR_TXT.DLNOP[1] = 4;
+    }
+  } else if (type == 2) {
+    if (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == 'B') {
+      razmer = atoi(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND + 2);
+      razmer = (razmer + 7) / 8;
+      ARG = razmer;
+      for (int i = 0; i < razmer; i++) {
+        TXT.BUF_TXT[16 + i] = 00;
+      }
+    } else if (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == 'C') {
+      razmer = atoi(TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND + 2);
+      ARG = razmer;
+      for (int i = 0; i < razmer; i++) {
+        TXT.BUF_TXT[16 + i] = 32;
+      }
+    } else if (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == '0') {
+      // CHADR += 3;
+      CHADR = (CHADR + 3) / 4 * 4;
+      return;
+    }
   }
+
   memcpy(TXT.STR_TXT.POLE9, ESD.STR_ESD.POLE11, 8); /*формиров.идентифик.поля */
 
   memcpy(OBJTEXT[ITCARD], TXT.BUF_TXT, 80); /*запись об'ектной карты  */
   ITCARD += 1;                              /*коррекц.инд-са своб.к-ты*/
   CHADR = CHADR + ARG;                      /*коррекц.счетчика адреса */
+
+  for (int i = 0; i < razmer; i++) {
+    TXT.BUF_TXT[16 + i] = 64;
+  }
+
         return;
       }
 
