@@ -937,6 +937,85 @@ SRX2:
   return (0); /*выйти из подпрограммы   */
 }
 /*..........................................................................*/
+void base(const char *metka, int *delta, int *addr, int *base_reg, int offset) {
+  *base_reg = 0x05;
+  if (!memcmp(metka, "@BUF0", 5)) {
+    *delta = 0x4B;
+  } else if (!memcmp(metka, "@ZERO_C", 7)) {
+    *delta = 0x51;
+  } else if (!memcmp(metka, "A", 1)) {
+    *delta = 0x40;
+  } else if (!memcmp(metka, "B", 1)) {
+    *delta = 0x45;
+  } else if (!memcmp(metka, "@R_PTR", 6)) {
+    *base_reg = 0x04;
+    *delta = 0x00;
+  } else if (!memcmp(metka, "@NULL_C", 7)) {
+    *delta = 0x50;
+  }
+  *delta += offset;
+}
+
+int SSS() {
+  char *METKA1;
+  char *METKA2;
+  char *RAZR1;
+
+  // длины операндов
+  unsigned char LL;
+  unsigned int B1D1;
+  unsigned int B2D2;
+
+  int DELTA;
+  int ZNSYM;
+  int NBASRG;
+
+  char *PTR;
+
+  SS.OP_SS.OP = T_MOP[I3].CODOP;
+
+  int dopAdr = 0;
+  if (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[5] == '+') {
+    METKA1 = strtok((char *)TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND, "+");
+    dopAdr = atoi(strtok(NULL, "("));
+    RAZR1 = strtok(NULL, "),");
+  } else if (TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND[0] == '0') {
+    char *unusedChars = strtok((char *)TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND, "(");
+    RAZR1 = strtok(NULL, ",");
+    METKA1 = strtok(NULL, "),");
+    // METKA1 = strtok(NULL, ",");
+    // RAZR1 = strtok(NULL, "),");
+  } else {
+    METKA1 = strtok((char *)TEK_ISX_KARTA.STRUCT_BUFCARD.OPERAND, "(");
+    RAZR1 = strtok(NULL, "),");
+  }
+
+  METKA2 = strtok(NULL, ",");
+  METKA2 = strtok(METKA2, " ");
+
+  LL = ((atoi(RAZR1) - 1));
+
+  base(METKA1, &DELTA, &ZNSYM, &NBASRG, dopAdr);
+  B1D1 = NBASRG << 12;
+  B1D1 += DELTA;
+  PTR = (char *)&B1D1;
+  swab(PTR, PTR, 2);
+
+  base(METKA2, &DELTA, &ZNSYM, &NBASRG, 0);
+  B2D2 = NBASRG << 12;
+  B2D2 += DELTA;
+  PTR = (char *)&B2D2;
+  swab(PTR, PTR, 2);
+
+  SS.OP_SS.LL = LL;
+  SS.OP_SS.B1D1 = B1D1;
+  SS.OP_SS.B2D2 = B2D2;
+
+  // вызываем формирование TXT-карты
+  STXT(6, 0);
+  return (0); /*выйти из подпрограммы */
+}
+/*..........................................................................*/
 int SOBJFILE()                              /*подпрогр.формир.об'екн. */
 {                                           /*файла                   */
   FILE *fp;                                 /*набор рабочих           */
