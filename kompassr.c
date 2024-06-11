@@ -247,19 +247,17 @@ union /*определить об'единение  */
   struct OPRX OP_RX;          /*структурировать его     */
 } RX;
 
-struct OPSS
-{ unsigned char OP;
+struct OPSS {
+  unsigned char OP;
   unsigned char LL;
   unsigned short B1D1;
   unsigned short B2D2;
 };
 
-union
-{
+union {
   unsigned char BUF_OP_SS[6];
   struct OPSS OP_SS;
 } SS;
-
 
 struct STR_BUF_ESD /*структ.буфера карты ESD */
 {
