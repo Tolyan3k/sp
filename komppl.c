@@ -1968,9 +1968,9 @@ int SVI2() {
   COMMENT_END(";Обнулим значение регистра R_C");
   ZKARD();
 
-  /* L @R_ONE,@R_ONE */
+  /* L @R_ONE,@ONE_R */
   memcpy(ASS_CARD._BUFCARD.OPERAC, "L", 1);
-  memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_ONE,@R_ONE", 13);
+  memcpy(ASS_CARD._BUFCARD.OPERAND, "@R_ONE,@ONE_R", 13);
   COMMENT_END(";Присвоим в регистр R_ONE единицу из значения ONE_R");
   ZKARD();
 
